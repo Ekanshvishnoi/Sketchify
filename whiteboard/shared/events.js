@@ -34,6 +34,8 @@ export const CHAT_MESSAGE     = "chat-message";     // client → server: user s
 export const CHAT_BROADCAST   = "chat-broadcast";   // server → room: deliver the message to everyone in the room
 
 // ─── Spectator swap ────────────────────────────────────────────────
+export const SPECTATOR_JOINED = "spectator-joined"; // server → room: a spectator joined
+export const SPECTATOR_LEFT   = "spectator-left";   // server → room: a spectator left
 export const SWAP_REQUEST     = "swap-request";     // client → server: spectator is asking for an active seat
 export const SWAP_RESPONSE    = "swap-response";    // client → server: active user approved or denied the request
 export const SWAP_BROADCAST   = "swap-broadcast";   // server → room: roles have changed, here are the new seat assignments
