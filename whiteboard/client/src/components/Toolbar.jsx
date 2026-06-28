@@ -55,6 +55,7 @@ export default function Toolbar({
 }) {
   const [showColorPicker, setShowColorPicker]   = useState(false);
   const [showMenu,        setShowMenu]          = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // refs to detect clicks outside the popups so we can close them
   const colorRef = useRef(null);
@@ -170,10 +171,17 @@ export default function Toolbar({
             title="Copy room code"
             onClick={() => {
               navigator.clipboard.writeText(roomCode);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
             }}
-            style={styles.copyBtn}
+            style={{
+              ...styles.copyBtn,
+              color:      copied ? "#4ade80" : "#888",
+              transform:  copied ? "scale(1.2)" : "scale(1)",
+              transition: "all 0.2s ease",
+            }}
           >
-            ⧉
+            {copied ? "✓" : "⧉"}
           </button>
         </div>
       ) : (
