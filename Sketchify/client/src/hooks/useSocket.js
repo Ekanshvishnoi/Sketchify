@@ -20,6 +20,12 @@ import {
   SWAP_REQUEST,
   SWAP_RESPONSE,
   SWAP_BROADCAST,
+  STROKE_START,
+  STROKE_POINT,
+  STROKE_END,
+  STROKE_UPDATE,
+  UNDO_STROKE,
+  UNDO_BROADCAST,
 } from "../../../shared/events.js";
 
 export function useSocket({
@@ -33,6 +39,8 @@ export function useSocket({
   onSpectatorLeft,
   onSwapRequest,    // NEW — active user receives a swap request from spectator
   onSwapBroadcast,  // NEW — everyone receives the result of a swap
+  onStrokeUpdate,   // NEW — incoming stroke event from partner
+  onUndoBroadcast,  // NEW — undo broadcast from server
 }) {
 
   // ── Callback refs ────────────────────────────────────────────────
@@ -46,6 +54,8 @@ export function useSocket({
   const onSpectatorLeftRef    = useRef(onSpectatorLeft);
   const onSwapRequestRef      = useRef(onSwapRequest);
   const onSwapBroadcastRef    = useRef(onSwapBroadcast);
+  const onStrokeUpdateRef     = useRef(onStrokeUpdate);
+  const onUndoBroadcastRef    = useRef(onUndoBroadcast);
 
   useEffect(() => { onRoomJoinedRef.current       = onRoomJoined;       }, [onRoomJoined]);
   useEffect(() => { onRoomNotFoundRef.current     = onRoomNotFound;     }, [onRoomNotFound]);
@@ -57,6 +67,8 @@ export function useSocket({
   useEffect(() => { onSpectatorLeftRef.current    = onSpectatorLeft;    }, [onSpectatorLeft]);
   useEffect(() => { onSwapRequestRef.current      = onSwapRequest;      }, [onSwapRequest]);
   useEffect(() => { onSwapBroadcastRef.current    = onSwapBroadcast;    }, [onSwapBroadcast]);
+  useEffect(() => { onStrokeUpdateRef.current     = onStrokeUpdate;     }, [onStrokeUpdate]);
+  useEffect(() => { onUndoBroadcastRef.current    = onUndoBroadcast;    }, [onUndoBroadcast]);
 
   // ── Register listeners once on mount ────────────────────────────
   useEffect(() => {
@@ -70,6 +82,8 @@ export function useSocket({
     function onSpcLeft(data)      { onSpectatorLeftRef.current?.(data); }
     function onSwapReq(data)      { onSwapRequestRef.current?.(data); }
     function onSwapResult(data)   { onSwapBroadcastRef.current?.(data); }
+    function onStrokeUpd(data)    { onStrokeUpdateRef.current?.(data); }
+    function onUndoBC(data)       { onUndoBroadcastRef.current?.(data); }
 
     socket.on(ROOM_JOINED,       onJoined);
     socket.on(ROOM_NOT_FOUND,    onNotFound);
@@ -81,6 +95,8 @@ export function useSocket({
     socket.on(SPECTATOR_LEFT,    onSpcLeft);
     socket.on(SWAP_REQUEST,      onSwapReq);
     socket.on(SWAP_BROADCAST,    onSwapResult);
+    socket.on(STROKE_UPDATE,     onStrokeUpd);
+    socket.on(UNDO_BROADCAST,    onUndoBC);
 
     return () => {
       socket.off(ROOM_JOINED,       onJoined);
@@ -93,6 +109,8 @@ export function useSocket({
       socket.off(SPECTATOR_LEFT,    onSpcLeft);
       socket.off(SWAP_REQUEST,      onSwapReq);
       socket.off(SWAP_BROADCAST,    onSwapResult);
+      socket.off(STROKE_UPDATE,     onStrokeUpd);
+      socket.off(UNDO_BROADCAST,    onUndoBC);
     };
   }, []);
 
@@ -117,5 +135,32 @@ export function useSocket({
     socket.emit(SWAP_RESPONSE, { approved });
   }, []);
 
-  return { socket, joinRoom, sendMessage, sendSwapRequest, sendSwapResponse };
+  // ── Draw emitters ────────────────────────────────────────────────
+  const emitStrokeStart = useCallback((stroke) => {
+    socket.emit(STROKE_START, { stroke });
+  }, []);
+
+  const emitStrokePoint = useCallback((strokeId, point) => {
+    socket.emit(STROKE_POINT, { strokeId, point });
+  }, []);
+
+  const emitStrokeEnd = useCallback((strokeId) => {
+    socket.emit(STROKE_END, { strokeId });
+  }, []);
+
+  const emitUndo = useCallback((strokeId) => {
+    socket.emit(UNDO_STROKE, { strokeId });
+  }, []);
+
+  return {
+    socket,
+    joinRoom,
+    sendMessage,
+    sendSwapRequest,
+    sendSwapResponse,
+    emitStrokeStart,
+    emitStrokePoint,
+    emitStrokeEnd,
+    emitUndo,
+  };
 }

@@ -18,6 +18,11 @@ body {
   color: #f0f0f0;
 }
 
+@keyframes speakPulse {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(1.1); }
+}
+
 button {
   cursor: pointer;
   font-family: inherit;
