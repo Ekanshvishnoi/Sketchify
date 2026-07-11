@@ -209,3 +209,10 @@ Spectator clicks "Request Seat A"
 - Max drawing history: 500 strokes per seat, 200 chat messages per room
 
 ---
+
+##  Author
+
+**Ekansh Vishnoi**
+
+- GitHub: https://github.com/Ekanshvishnoi
+- LinkedIn: https://linkedin.com/in/ekansh-vishnoi
