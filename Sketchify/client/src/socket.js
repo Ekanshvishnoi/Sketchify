@@ -11,7 +11,10 @@
  */
 import { io } from "socket.io-client";
 
-export const socket = io("", {
+const SOCKET_URL = import.meta.env.VITE_SERVER_URL 
+  || "https://sketchify-production-e4cd.up.railway.app";
+
+export const socket = io(SOCKET_URL, {
   autoConnect: true,
   transports: ["websocket"],
 });
