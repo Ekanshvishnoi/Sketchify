@@ -13,7 +13,7 @@ import {
   SWAP_REQUEST,
   SWAP_RESPONSE,
   SWAP_BROADCAST,
-} from "../../shared/events.js";
+} from "../events.js";
 
 export function registerSwapHandlers(io, socket) {
 

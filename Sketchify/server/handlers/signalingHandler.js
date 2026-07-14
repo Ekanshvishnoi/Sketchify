@@ -19,7 +19,7 @@
  * is no longer involved in the call.
  */
 import { getRoomBySocket } from "../store/roomStore.js";
-import { RTC_OFFER, RTC_ANSWER, RTC_ICE } from "../../shared/events.js";
+import { RTC_OFFER, RTC_ANSWER, RTC_ICE } from "../events.js";
 
 export function registerSignalingHandlers(io, socket) {
 

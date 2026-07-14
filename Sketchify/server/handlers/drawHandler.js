@@ -27,7 +27,7 @@ import {
   STROKE_UPDATE,
   UNDO_STROKE,
   UNDO_BROADCAST,
-} from "../../shared/events.js";
+} from "../events.js";
 
 export function registerDrawHandlers(io, socket) {
 

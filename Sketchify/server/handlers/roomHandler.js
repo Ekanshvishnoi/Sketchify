@@ -20,7 +20,7 @@ import {
   USER_DISCONNECTED,
   SPECTATOR_JOINED,
   SPECTATOR_LEFT,
-} from "../../shared/events.js";
+} from "../events.js";
 
 // Helper: build the ROOM_JOINED payload from a room object
 function buildRoomPayload(room, seat) {

@@ -16,7 +16,7 @@ import {
 import {
   CHAT_MESSAGE,
   CHAT_BROADCAST,
-} from "../../shared/events.js";
+} from "../events.js";
 
 // Tiny ID generator
 function uid() {
